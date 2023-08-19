@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -73,6 +74,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //compose destinations
+    val destinationVersion = "1.8.42-beta"
+    implementation("io.github.raamcosta.compose-destinations:core:$destinationVersion")
+    ksp("io.github.raamcosta.compose-destinations:ksp:$destinationVersion")
 
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

@@ -12,6 +12,9 @@ import com.hotmail.or_dvir.televizia.ui.theme.TeleviZiaTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 
 class MainActivity : ComponentActivity() {
+    // todo add credits for all app icons
+    //      in menu and also in readme
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

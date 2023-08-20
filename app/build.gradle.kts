@@ -56,12 +56,13 @@ android {
 
 dependencies {
     // todo add
-    //  koin
-    //  navigation
     //  retrofit
     //  room
 
     implementation("androidx.core:core-ktx:1.10.1")
+
+    //koin
+    implementation ("io.insert-koin:koin-androidx-compose:3.4.6")
 
     //compose
     implementation("androidx.activity:activity-compose:1.7.2")

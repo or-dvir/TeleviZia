@@ -1,3 +1,3 @@
 package com.hotmail.or_dvir.televizia.data.local.models
 
-data class TvShowLocalModel()
+data class TvShowLocalModel(val t:Int)

@@ -13,7 +13,11 @@ class MovieRepositoryImpl : MovieRepository {
 
     //todo temp for testing
     private val allMovies = List(9) { i: Int ->
-        MovieNetworkModel(name = "movie $i", releaseYear = "200$i")
+        MovieNetworkModel(
+            name = "movie $i",
+            releaseYear = "200$i",
+            posterUrl = "https://i.etsystatic.com/13367669/r/il/db21fd/2198543930/il_570xN.2198543930_4qne.jpg"
+        )
     }
 
     override suspend fun getAllMovies(): List<MovieLocalModel> {

@@ -61,6 +61,9 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.10.1")
 
+    //coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
     //koin
     implementation ("io.insert-koin:koin-androidx-compose:3.4.6")
 
@@ -71,6 +74,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    //compose-testing
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")

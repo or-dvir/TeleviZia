@@ -38,10 +38,13 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
 
+// todo
+//  add pagination
+
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun HomeScreen(
+fun AllShowsScreen(
     navigator: DestinationsNavigator,
     viewModel: AllShowsViewModel = koinViewModel()
 ) {

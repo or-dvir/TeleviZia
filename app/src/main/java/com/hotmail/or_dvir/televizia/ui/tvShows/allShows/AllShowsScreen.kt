@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -60,51 +61,54 @@ fun AllShowsScreen(
 
 @Composable
 private fun LoadingItem() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(bottom = 5.dp)
-            .background(
-                color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(5.dp)
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val container = this
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(bottom = 5.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(5.dp)
+                )
+        ) {
+            // represents show poster
+            Box(
+                modifier = Modifier
+                    .size(container.maxWidth, getTvShowPosterSize().second)
+                    .shimmerEffect("TvShowLoadingItemPoster")
             )
-    ) {
-        val posterSize = getTvShowPosterSize()
 
-        // represents show poster
-        Box(
-            modifier = Modifier
-                .size(posterSize.first, posterSize.second)
-                .shimmerEffect("TvShowLoadingItemPoster")
-        )
+            val textHeight = 8.dp
+            val maxWidth = container.maxWidth
+            val nameFirstLineWidth = remember(maxWidth) { maxWidth * 0.8f }
+            val nameSecondLineWidth = remember(maxWidth) { maxWidth * 0.65f }
+            val yearWidth = remember(maxWidth) { maxWidth * 0.3f }
 
-        val textHeight = 8.dp
-        val nameFirstLineWidth = remember(posterSize) { posterSize.first * 0.8f }
-        val nameSecondLineWidth = remember(posterSize) { posterSize.first * 0.65f }
-        val yearWidth = remember(posterSize) { posterSize.first * 0.3f }
+            //region represents show name
+            Spacer(Modifier.height(5.dp))
+            Box(
+                modifier = Modifier
+                    .size(nameFirstLineWidth, textHeight)
+                    .shimmerEffect("TvShowLoadingItemName"),
+            )
+            Spacer(Modifier.height(2.dp))
+            Box(
+                Modifier
+                    .size(nameSecondLineWidth, textHeight)
+                    .shimmerEffect("TvShowLoadingItemName")
+            )
+            //endregion
 
-        //region represents show name
-        Spacer(Modifier.height(5.dp))
-        Box(
-            modifier = Modifier
-                .size(nameFirstLineWidth, textHeight)
-                .shimmerEffect("TvShowLoadingItemName"),
-        )
-        Spacer(Modifier.height(2.dp))
-        Box(
-            Modifier
-                .size(nameSecondLineWidth, textHeight)
-                .shimmerEffect("TvShowLoadingItemName")
-        )
-        //endregion
-
-        //represents show release/end year
-        Spacer(modifier = Modifier.height(8.dp))
-        Box(
-            Modifier
-                .size(yearWidth, textHeight)
-                .shimmerEffect("TvShowLoadingItemYears")
-        )
+            //represents show release/end year
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                Modifier
+                    .size(yearWidth, textHeight)
+                    .shimmerEffect("TvShowLoadingItemYears")
+            )
+        }
     }
 }
 

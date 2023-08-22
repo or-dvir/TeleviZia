@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -39,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hotmail.or_dvir.televizia.R
 import com.hotmail.or_dvir.televizia.data.local.models.TvShowLocalModel
+import com.hotmail.or_dvir.televizia.ui.isEven
 import com.hotmail.or_dvir.televizia.ui.shared.shimmerEffect
 import com.hotmail.or_dvir.televizia.ui.tvShows.getTvShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
@@ -177,7 +176,7 @@ private fun ShowsGridPreview() {
     val longShowNames = List(4) { i ->
         TvShowLocalModel.dummyShow(
             name = "a long name which spans multiple lines",
-            endYear = if (i % 2 == 0) "2005" else null
+            endYear = if (i.isEven()) "2005" else null
         )
     }
 
@@ -250,5 +249,8 @@ private fun ShowListItemPreview() {
 
 
 private enum class LoadingItemNameSize(val numLines: Int) {
-    SHORT(1), MEDIUM(3), LONG(5)
+    SHORT(1),
+    MEDIUM(2),
+    LONG(4),
+    EXTRA_LONG(6)
 }

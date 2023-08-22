@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.hotmail.or_dvir.televizia.ui.homeScreen.NavGraphs
 import com.hotmail.or_dvir.televizia.ui.theme.TeleviZiaTheme
+import com.hotmail.or_dvir.televizia.ui.tvShows.allShows.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 
 class MainActivity : ComponentActivity() {

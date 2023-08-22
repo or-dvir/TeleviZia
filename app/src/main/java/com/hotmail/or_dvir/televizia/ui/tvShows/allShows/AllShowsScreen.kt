@@ -1,8 +1,7 @@
-package com.hotmail.or_dvir.televizia.ui.homeScreen
+package com.hotmail.or_dvir.televizia.ui.tvShows.allShows
 
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,17 +22,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hotmail.or_dvir.televizia.R
-import com.hotmail.or_dvir.televizia.data.local.models.MovieLocalModel
+import com.hotmail.or_dvir.televizia.data.local.models.TvShowLocalModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -44,14 +43,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    viewModel: HomeScreenViewModel = koinViewModel()
+    viewModel: AllShowsViewModel = koinViewModel()
 ) {
-    Text("home")
+    Text("all shows")
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun MovieGrid(movies: List<MovieLocalModel>) {
+private fun ShowsGrid(shows: List<TvShowLocalModel>) {
     val itemSpacing = 8.dp
     val orientation = LocalConfiguration.current.orientation
 
@@ -67,31 +66,34 @@ private fun MovieGrid(movies: List<MovieLocalModel>) {
         items(
             //todo when you have id's add them as key. MUST BE SAVEABLE IN A BUNDLE!
 //            key = { it.id },
-            items = movies
+            items = shows
         ) {
-            MovieListItem(it)
+            ShowListItem(it)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieGridPreview() {
-    val shortMovieNames = List(4) { MovieLocalModel.dummyMovie() }
-    val longMovieNames = List(4) {
-        MovieLocalModel.dummyMovie(name = "a long name which spans multiple lines")
+private fun ShowsGridPreview() {
+    val shortShowNames = List(4) { TvShowLocalModel.dummyShow() }
+    val longShowNames = List(4) { i ->
+        TvShowLocalModel.dummyShow(
+            name = "a long name which spans multiple lines",
+            endYear = if (i % 2 == 0) "2005" else null
+        )
     }
 
-    val result = shortMovieNames.zip(longMovieNames).flatMap {
+    val result = shortShowNames.zip(longShowNames).flatMap {
         listOf(it.first, it.second)
     }
 
-    MovieGrid(result)
+    ShowsGrid(result)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MovieListItem(movie: MovieLocalModel) {
+private fun ShowListItem(show: TvShowLocalModel) {
     Card(onClick = { /*TODO*/ }) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -102,28 +104,29 @@ private fun MovieListItem(movie: MovieLocalModel) {
                     .fillMaxWidth(),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                placeholder = painterResource(R.drawable.placeholder),
-                model = movie.posterUrl
+                placeholder = painterResource(R.drawable.poster_placeholder),
+                model = show.posterUrl
             )
 
             Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(1.dp, Color.Blue),
+                modifier = Modifier.padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
-                    text = movie.name
+                    text = show.name
                 )
                 Spacer(modifier = Modifier.height(5.dp))
+
+                //todo is "current" the best strign here?
+                val endYear = show.endYear ?: stringResource(R.string.present)
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleSmall,
-                    text = movie.releaseYear,
+                    text = "${show.releaseYear}-$endYear",
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -133,12 +136,17 @@ private fun MovieListItem(movie: MovieLocalModel) {
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieListItemPreview() {
+private fun ShowListItemPreview() {
     Column(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        MovieListItem(MovieLocalModel.dummyMovie())
-        MovieListItem(MovieLocalModel.dummyMovie("a very long movie name which spands multiple lines"))
+        ShowListItem(TvShowLocalModel.dummyShow())
+        ShowListItem(
+            TvShowLocalModel.dummyShow(
+                name = "a very long show name which spans multiple lines",
+                endYear = null
+            )
+        )
     }
 }

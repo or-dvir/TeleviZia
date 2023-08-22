@@ -44,7 +44,6 @@ import com.hotmail.or_dvir.televizia.ui.tvShows.getTvShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlin.random.Random
 import org.koin.androidx.compose.koinViewModel
 
 // todo
@@ -61,7 +60,7 @@ fun AllShowsScreen(
 }
 
 @Composable
-private fun LoadingItem() {
+private fun LoadingItem(nameSize: LoadingItemNameSize) {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val containerWidth = maxWidth
 
@@ -82,60 +81,67 @@ private fun LoadingItem() {
             )
             Spacer(Modifier.height(5.dp))
 
-
-//            val nameFirstLineWidth = remember(maxWidth) { maxWidth * 0.8f }
-//            val nameSecondLineWidth = remember(maxWidth) { maxWidth * 0.65f }
-
             //region represents show name
-            val maxLines = 5
-            val textHeight = 8.dp
-            repeat(Random.nextInt(1, maxLines)) { index ->
-                val lineWidthPercent = Random.nextInt(40, 100)
-                val finalLineWidth = containerWidth * (lineWidthPercent / 100f)
+            val lineHeight = 8.dp
+            val lastLine = nameSize.numLines
+            (1..lastLine).forEach { currentLine ->
+                val lineWidthPercent = when (currentLine) {
+                    1 -> 0.8f
+                    lastLine -> 0.5f
+                    else -> 0.65f
+                }
+
                 Box(
                     modifier = Modifier
-//                        .size(containerWidth * 0.5f, textHeight)
-                        .size(finalLineWidth, textHeight)
-//                        .size(nameFirstLineWidth, textHeight)
+                        .size(containerWidth * lineWidthPercent, lineHeight)
                         .shimmerEffect("TvShowLoadingItemName"),
                 )
-                if (index != maxLines - 1) {
+
+                if (currentLine != lastLine) {
                     Spacer(Modifier.height(2.dp))
                 }
-//                Box(
-//                    Modifier
-//                        .size(nameSecondLineWidth, textHeight)
-//                        .shimmerEffect("TvShowLoadingItemName")
-//                )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
             //endregion
 
             //represents show release/end year
             val yearWidth = remember(containerWidth) { containerWidth * 0.3f }
-
-            Spacer(modifier = Modifier.height(8.dp))
             Box(
                 Modifier
-                    .size(yearWidth, textHeight)
+                    .size(yearWidth, lineHeight)
                     .shimmerEffect("TvShowLoadingItemYears")
             )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LoadingItemGrid() {
     val itemSpacing = 8.dp
-    LazyVerticalGrid(
-        userScrollEnabled = false,
+
+    LazyVerticalStaggeredGrid(
         modifier = Modifier.fillMaxSize(),
+        userScrollEnabled = false,
         contentPadding = PaddingValues(itemSpacing),
-        verticalArrangement = Arrangement.spacedBy(itemSpacing),
+        verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-        columns = GridCells.Adaptive(getTvShowPosterSize().first)
+        columns = StaggeredGridCells.Adaptive(getTvShowPosterSize().first)
     ) {
-        items(15) { LoadingItem() }
+        items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
     }
+
+//    LazyVerticalGrid(
+//        userScrollEnabled = false,
+//        modifier = Modifier.fillMaxSize(),
+//        contentPadding = PaddingValues(itemSpacing),
+//        verticalArrangement = Arrangement.spacedBy(itemSpacing),
+//        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+//        columns = GridCells.Adaptive(getTvShowPosterSize().first)
+//    ) {
+//        items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
+//    }
 }
 
 @Preview(showBackground = true)
@@ -240,4 +246,9 @@ private fun ShowListItemPreview() {
             )
         )
     }
+}
+
+
+private enum class LoadingItemNameSize(val numLines: Int) {
+    SHORT(1), MEDIUM(3), LONG(5)
 }

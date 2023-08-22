@@ -1,9 +1,10 @@
 package com.hotmail.or_dvir.televizia.ui.tvShows.allShows
 
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -12,18 +13,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hotmail.or_dvir.televizia.R
 import com.hotmail.or_dvir.televizia.data.local.models.TvShowLocalModel
+import com.hotmail.or_dvir.televizia.ui.shared.shimmerEffect
+import com.hotmail.or_dvir.televizia.ui.tvShows.getTvShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -51,18 +58,83 @@ fun AllShowsScreen(
     Text("all shows")
 }
 
+@Composable
+private fun LoadingItem() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(bottom = 5.dp)
+            .background(
+                color = MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(5.dp)
+            )
+    ) {
+        val posterSize = getTvShowPosterSize()
+
+        // represents show poster
+        Box(
+            modifier = Modifier
+                .size(posterSize.first, posterSize.second)
+                .shimmerEffect("TvShowLoadingItemPoster")
+        )
+
+        val textHeight = 8.dp
+        val nameFirstLineWidth = remember(posterSize) { posterSize.first * 0.8f }
+        val nameSecondLineWidth = remember(posterSize) { posterSize.first * 0.65f }
+        val yearWidth = remember(posterSize) { posterSize.first * 0.3f }
+
+        //region represents show name
+        Spacer(Modifier.height(5.dp))
+        Box(
+            modifier = Modifier
+                .size(nameFirstLineWidth, textHeight)
+                .shimmerEffect("TvShowLoadingItemName"),
+        )
+        Spacer(Modifier.height(2.dp))
+        Box(
+            Modifier
+                .size(nameSecondLineWidth, textHeight)
+                .shimmerEffect("TvShowLoadingItemName")
+        )
+        //endregion
+
+        //represents show release/end year
+        Spacer(modifier = Modifier.height(8.dp))
+        Box(
+            Modifier
+                .size(yearWidth, textHeight)
+                .shimmerEffect("TvShowLoadingItemYears")
+        )
+    }
+}
+
+@Composable
+private fun LoadingItemGrid() {
+    val itemSpacing = 8.dp
+    LazyVerticalGrid(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(itemSpacing),
+        verticalArrangement = Arrangement.spacedBy(itemSpacing),
+        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+        columns = GridCells.Adaptive(getTvShowPosterSize().first)
+    ) {
+        items(15) { LoadingItem() }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoadingItemGridPreview() = LoadingItemGrid()
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ShowsGrid(shows: List<TvShowLocalModel>) {
     val itemSpacing = 8.dp
-    val orientation = LocalConfiguration.current.orientation
-
-    val minColumnWidth = if (orientation == ORIENTATION_PORTRAIT) 100.dp else 125.dp
 
     LazyVerticalStaggeredGrid(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(itemSpacing),
-        columns = StaggeredGridCells.Adaptive(minColumnWidth),
+        columns = StaggeredGridCells.Adaptive(getTvShowPosterSize().first),
         verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(itemSpacing)
     ) {

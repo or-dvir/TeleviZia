@@ -44,6 +44,7 @@ import com.hotmail.or_dvir.televizia.ui.tvShows.getTvShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlin.random.Random
 import org.koin.androidx.compose.koinViewModel
 
 // todo
@@ -62,7 +63,7 @@ fun AllShowsScreen(
 @Composable
 private fun LoadingItem() {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val container = this
+        val containerWidth = maxWidth
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,32 +77,42 @@ private fun LoadingItem() {
             // represents show poster
             Box(
                 modifier = Modifier
-                    .size(container.maxWidth, getTvShowPosterSize().second)
+                    .size(containerWidth, getTvShowPosterSize().second)
                     .shimmerEffect("TvShowLoadingItemPoster")
             )
+            Spacer(Modifier.height(5.dp))
 
-            val textHeight = 8.dp
-            val maxWidth = container.maxWidth
-            val nameFirstLineWidth = remember(maxWidth) { maxWidth * 0.8f }
-            val nameSecondLineWidth = remember(maxWidth) { maxWidth * 0.65f }
-            val yearWidth = remember(maxWidth) { maxWidth * 0.3f }
+
+//            val nameFirstLineWidth = remember(maxWidth) { maxWidth * 0.8f }
+//            val nameSecondLineWidth = remember(maxWidth) { maxWidth * 0.65f }
 
             //region represents show name
-            Spacer(Modifier.height(5.dp))
-            Box(
-                modifier = Modifier
-                    .size(nameFirstLineWidth, textHeight)
-                    .shimmerEffect("TvShowLoadingItemName"),
-            )
-            Spacer(Modifier.height(2.dp))
-            Box(
-                Modifier
-                    .size(nameSecondLineWidth, textHeight)
-                    .shimmerEffect("TvShowLoadingItemName")
-            )
+            val maxLines = 5
+            val textHeight = 8.dp
+            repeat(Random.nextInt(1, maxLines)) { index ->
+                val lineWidthPercent = Random.nextInt(40, 100)
+                val finalLineWidth = containerWidth * (lineWidthPercent / 100f)
+                Box(
+                    modifier = Modifier
+//                        .size(containerWidth * 0.5f, textHeight)
+                        .size(finalLineWidth, textHeight)
+//                        .size(nameFirstLineWidth, textHeight)
+                        .shimmerEffect("TvShowLoadingItemName"),
+                )
+                if (index != maxLines - 1) {
+                    Spacer(Modifier.height(2.dp))
+                }
+//                Box(
+//                    Modifier
+//                        .size(nameSecondLineWidth, textHeight)
+//                        .shimmerEffect("TvShowLoadingItemName")
+//                )
+            }
             //endregion
 
             //represents show release/end year
+            val yearWidth = remember(containerWidth) { containerWidth * 0.3f }
+
             Spacer(modifier = Modifier.height(8.dp))
             Box(
                 Modifier
@@ -116,6 +127,7 @@ private fun LoadingItem() {
 private fun LoadingItemGrid() {
     val itemSpacing = 8.dp
     LazyVerticalGrid(
+        userScrollEnabled = false,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(itemSpacing),
         verticalArrangement = Arrangement.spacedBy(itemSpacing),

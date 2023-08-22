@@ -86,8 +86,8 @@ private fun LoadingItem(nameSize: LoadingItemNameSize) {
             (1..lastLine).forEach { currentLine ->
                 val lineWidthPercent = when (currentLine) {
                     1 -> 0.8f
-                    lastLine -> 0.5f
-                    else -> 0.65f
+                    lastLine -> 0.45f
+                    else -> if (currentLine.isEven()) 0.65f else 0.55f
                 }
 
                 Box(

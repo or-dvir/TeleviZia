@@ -1,20 +1,20 @@
 package com.hotmail.or_dvir.televizia.data.repositories.shows
 
-import com.hotmail.or_dvir.televizia.data.local.models.TvShowLocalModel
+import com.hotmail.or_dvir.televizia.data.local.models.ShowLocalModel
 import com.hotmail.or_dvir.televizia.data.mappers.toLocalModels
-import com.hotmail.or_dvir.televizia.data.remote.models.TvShowNetworkModel
+import com.hotmail.or_dvir.televizia.data.remote.models.ShowNetworkModel
 import com.hotmail.or_dvir.televizia.ui.isEven
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-class TvShowRepositoryImpl : TvShowRepository {
+class ShowRepositoryImpl : ShowRepository {
     // todo add scope that should not be cancelled.
     //      should be available everywhere
 
     //todo temp for testing
     private val allShows = List(9) { i: Int ->
-        TvShowNetworkModel(
+        ShowNetworkModel(
             name = "show $i",
             releaseYear = "200$i",
             endYear = if (i.isEven()) null else "2010",
@@ -22,7 +22,7 @@ class TvShowRepositoryImpl : TvShowRepository {
         )
     }
 
-    override suspend fun getAllShows(): List<TvShowLocalModel> {
+    override suspend fun getAllShows(): List<ShowLocalModel> {
         return withContext(Dispatchers.IO) {
             //todo temp for testing
             delay(3000)

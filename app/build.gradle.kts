@@ -87,7 +87,9 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$destinationVersion")
 
     //lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    val lifecycleVersion = "2.6.1"
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
 
     //Junit/espresso
     testImplementation("junit:junit:4.13.2")

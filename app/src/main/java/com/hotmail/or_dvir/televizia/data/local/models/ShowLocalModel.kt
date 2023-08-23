@@ -1,6 +1,6 @@
 package com.hotmail.or_dvir.televizia.data.local.models
 
-data class TvShowLocalModel(
+data class ShowLocalModel(
     val name: String,
     val releaseYear: String,
     val endYear: String?,
@@ -11,7 +11,7 @@ data class TvShowLocalModel(
             name: String = "test show",
             releaseYear: String = "2000",
             endYear: String? = "2010",
-        ) = TvShowLocalModel(
+        ) = ShowLocalModel(
             name = name,
             releaseYear = releaseYear,
             endYear = endYear,

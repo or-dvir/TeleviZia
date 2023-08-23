@@ -1,4 +1,4 @@
-package com.hotmail.or_dvir.televizia.ui.tvShows.allShows
+package com.hotmail.or_dvir.televizia.ui.shows.allShows
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -22,8 +22,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +37,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hotmail.or_dvir.televizia.R
-import com.hotmail.or_dvir.televizia.data.local.models.TvShowLocalModel
+import com.hotmail.or_dvir.televizia.data.local.models.ShowLocalModel
 import com.hotmail.or_dvir.televizia.ui.isEven
 import com.hotmail.or_dvir.televizia.ui.shared.shimmerEffect
-import com.hotmail.or_dvir.televizia.ui.tvShows.getTvShowPosterSize
+import com.hotmail.or_dvir.televizia.ui.shows.getShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -48,6 +52,7 @@ import org.koin.androidx.compose.koinViewModel
 // todo
 //  add pagination
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
 @Destination
 @Composable
@@ -55,7 +60,20 @@ fun AllShowsScreen(
     navigator: DestinationsNavigator,
     viewModel: AllShowsViewModel = koinViewModel()
 ) {
-    Text("all shows")
+    val isLoading by viewModel.loadingState.collectAsStateWithLifecycle()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = { Text(stringResource(R.string.allShowsScreen_title)) }
+            )
+        }
+    ) { paddingValues ->
+
+    }
+
+
 }
 
 @Composable
@@ -75,8 +93,8 @@ private fun LoadingItem(nameSize: LoadingItemNameSize) {
             // represents show poster
             Box(
                 modifier = Modifier
-                    .size(containerWidth, getTvShowPosterSize().second)
-                    .shimmerEffect("TvShowLoadingItemPoster")
+                    .size(containerWidth, getShowPosterSize().second)
+                    .shimmerEffect("ShowLoadingItemPoster")
             )
             Spacer(Modifier.height(5.dp))
 
@@ -93,7 +111,7 @@ private fun LoadingItem(nameSize: LoadingItemNameSize) {
                 Box(
                     modifier = Modifier
                         .size(containerWidth * lineWidthPercent, lineHeight)
-                        .shimmerEffect("TvShowLoadingItemName"),
+                        .shimmerEffect("ShowLoadingItemName"),
                 )
 
                 if (currentLine != lastLine) {
@@ -109,7 +127,7 @@ private fun LoadingItem(nameSize: LoadingItemNameSize) {
             Box(
                 Modifier
                     .size(yearWidth, lineHeight)
-                    .shimmerEffect("TvShowLoadingItemYears")
+                    .shimmerEffect("ShowLoadingItemYears")
             )
         }
     }
@@ -126,7 +144,7 @@ private fun LoadingItemGrid() {
         contentPadding = PaddingValues(itemSpacing),
         verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-        columns = StaggeredGridCells.Adaptive(getTvShowPosterSize().first)
+        columns = StaggeredGridCells.Adaptive(getShowPosterSize().first)
     ) {
         items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
     }
@@ -137,7 +155,7 @@ private fun LoadingItemGrid() {
 //        contentPadding = PaddingValues(itemSpacing),
 //        verticalArrangement = Arrangement.spacedBy(itemSpacing),
 //        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-//        columns = GridCells.Adaptive(getTvShowPosterSize().first)
+//        columns = GridCells.Adaptive(getShowPosterSize().first)
 //    ) {
 //        items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
 //    }
@@ -149,13 +167,13 @@ private fun LoadingItemGridPreview() = LoadingItemGrid()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShowsGrid(shows: List<TvShowLocalModel>) {
+private fun ShowsGrid(shows: List<ShowLocalModel>) {
     val itemSpacing = 8.dp
 
     LazyVerticalStaggeredGrid(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(itemSpacing),
-        columns = StaggeredGridCells.Adaptive(getTvShowPosterSize().first),
+        columns = StaggeredGridCells.Adaptive(getShowPosterSize().first),
         verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(itemSpacing)
     ) {
@@ -172,9 +190,9 @@ private fun ShowsGrid(shows: List<TvShowLocalModel>) {
 @Preview(showBackground = true)
 @Composable
 private fun ShowsGridPreview() {
-    val shortShowNames = List(4) { TvShowLocalModel.dummyShow() }
+    val shortShowNames = List(4) { ShowLocalModel.dummyShow() }
     val longShowNames = List(4) { i ->
-        TvShowLocalModel.dummyShow(
+        ShowLocalModel.dummyShow(
             name = "a long name which spans multiple lines",
             endYear = if (i.isEven()) "2005" else null
         )
@@ -189,7 +207,7 @@ private fun ShowsGridPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowListItem(show: TvShowLocalModel) {
+private fun ShowListItem(show: ShowLocalModel) {
     Card(onClick = { /*TODO*/ }) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -237,9 +255,9 @@ private fun ShowListItemPreview() {
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        ShowListItem(TvShowLocalModel.dummyShow())
+        ShowListItem(ShowLocalModel.dummyShow())
         ShowListItem(
-            TvShowLocalModel.dummyShow(
+            ShowLocalModel.dummyShow(
                 name = "a very long show name which spans multiple lines",
                 endYear = null
             )

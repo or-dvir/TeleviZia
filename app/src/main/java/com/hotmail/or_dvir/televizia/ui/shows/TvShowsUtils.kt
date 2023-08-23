@@ -1,4 +1,4 @@
-package com.hotmail.or_dvir.televizia.ui.tvShows
+package com.hotmail.or_dvir.televizia.ui.shows
 
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
  * @return Pair<Dp, Dp> where `first` is the width and `second` is the height
  */
 @Composable
-fun getTvShowPosterSize(): Pair<Dp, Dp> {
+fun getShowPosterSize(): Pair<Dp, Dp> {
     val orientation = LocalConfiguration.current.orientation
     return if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         //100 is the width of the TvPoster, scaled down to phone size

@@ -5,6 +5,7 @@ import com.hotmail.or_dvir.televizia.data.repositories.movies.MovieRepositoryImp
 import com.hotmail.or_dvir.televizia.data.repositories.shows.ShowRepository
 import com.hotmail.or_dvir.televizia.data.repositories.shows.ShowRepositoryImpl
 import com.hotmail.or_dvir.televizia.ui.shows.allShows.AllShowsViewModel
+import com.hotmail.or_dvir.televizia.ui.shows.showDetails.ShowDetailsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,4 +16,5 @@ internal val repositoriesModule = module {
 
 internal val viewModelsModule = module {
     viewModel { AllShowsViewModel(get()) }
+    viewModel { (showId: Int) -> ShowDetailsViewModel(showId = showId, showsRepo = get()) }
 }

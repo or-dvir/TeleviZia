@@ -16,6 +16,7 @@ class ShowRepositoryImpl : ShowRepository {
     //todo temp for testing
     private val allShows = List(9) { i: Int ->
         ShowNetworkModel(
+            id = Random.nextInt(),
             name = StringBuilder().apply {
                 repeat(Random.nextInt(1, 8)) {
                     append("show $i")

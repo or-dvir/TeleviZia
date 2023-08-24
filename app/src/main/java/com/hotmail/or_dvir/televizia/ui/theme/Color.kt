@@ -2,6 +2,9 @@ package com.hotmail.or_dvir.televizia.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+//todo look at google samples.
+//  choose a main color and build a "color scheme" around it (override colors in theme file!!!)
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)

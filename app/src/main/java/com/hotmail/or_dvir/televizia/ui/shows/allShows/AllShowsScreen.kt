@@ -237,7 +237,6 @@ private fun ShowListItem(show: ShowLocalModel) {
                 )
                 Spacer(modifier = Modifier.height(6.dp))
 
-                //todo is "current" the best strign here?
                 val endYear = show.endYear ?: stringResource(R.string.present)
                 Text(
                     modifier = Modifier.fillMaxWidth(),

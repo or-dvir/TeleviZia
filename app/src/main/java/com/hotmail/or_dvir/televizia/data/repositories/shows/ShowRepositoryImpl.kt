@@ -4,6 +4,7 @@ import com.hotmail.or_dvir.televizia.data.local.models.ShowLocalModel
 import com.hotmail.or_dvir.televizia.data.mappers.toLocalModels
 import com.hotmail.or_dvir.televizia.data.remote.models.ShowNetworkModel
 import com.hotmail.or_dvir.televizia.ui.isEven
+import kotlin.random.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -15,10 +16,17 @@ class ShowRepositoryImpl : ShowRepository {
     //todo temp for testing
     private val allShows = List(9) { i: Int ->
         ShowNetworkModel(
-            name = "show $i",
+            name = StringBuilder().apply {
+                repeat(Random.nextInt(1, 8)) {
+                    append("show $i")
+                    if (i != 9) {
+                        append(" ")
+                    }
+                }
+            }.toString(),
             releaseYear = "200$i",
             endYear = if (i.isEven()) null else "2010",
-            posterUrl = "https://i.etsystatic.com/13367669/r/il/db21fd/2198543930/il_570xN.2198543930_4qne.jpg"
+            posterUrl = "https://static.tvmaze.com/uploads/images/medium_portrait/0/1.jpg"
         )
     }
 

@@ -26,3 +26,7 @@ class AllShowsViewModel(
         setLoadingState(false)
     }
 }
+
+sealed class AllShowsUserActions {
+    data class OnShowClicked(val showId: Int) : AllShowsUserActions()
+}

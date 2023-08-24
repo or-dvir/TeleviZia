@@ -16,5 +16,5 @@ internal val repositoriesModule = module {
 
 internal val viewModelsModule = module {
     viewModel { AllShowsViewModel(get()) }
-    viewModel { (showId: Int) -> ShowDetailsViewModel(showId = showId, showsRepo = get()) }
+    viewModel { (showId: Int) -> ShowDetailsViewModel(showId, get()) }
 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +44,8 @@ import com.hotmail.or_dvir.televizia.R
 import com.hotmail.or_dvir.televizia.data.local.models.ShowLocalModel
 import com.hotmail.or_dvir.televizia.ui.isEven
 import com.hotmail.or_dvir.televizia.ui.shared.shimmerEffect
+import com.hotmail.or_dvir.televizia.ui.shows.allShows.AllShowsUserActions.OnShowClicked
+import com.hotmail.or_dvir.televizia.ui.shows.destinations.ShowDetailsScreenDestination
 import com.hotmail.or_dvir.televizia.ui.shows.getShowPosterSize
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -53,6 +54,8 @@ import org.koin.androidx.compose.koinViewModel
 
 // todo
 //  add pagination
+
+private typealias onUserAction = (AllShowsUserActions) -> Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
@@ -67,7 +70,7 @@ fun AllShowsScreen(
 
     val topAppBarBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-     Scaffold(
+    Scaffold(
         modifier = Modifier.nestedScroll(topAppBarBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
@@ -84,7 +87,12 @@ fun AllShowsScreen(
             if (isLoading) {
                 LoadingItemGrid()
             } else {
-                ShowsGrid(allShows)
+                ShowsGrid(allShows) { action ->
+                    if (action is OnShowClicked) {
+                        navigator.navigate(ShowDetailsScreenDestination(action.showId))
+                    }
+                    // todo more actions? pass along to view model
+                }
             }
         }
     }
@@ -170,7 +178,10 @@ private fun LoadingItemGridPreview() = LoadingItemGrid()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ShowsGrid(shows: List<ShowLocalModel>) {
+private fun ShowsGrid(
+    shows: List<ShowLocalModel>,
+    onUserAction: onUserAction
+) {
     val itemSpacing = 8.dp
 
     LazyVerticalStaggeredGrid(
@@ -181,11 +192,10 @@ private fun ShowsGrid(shows: List<ShowLocalModel>) {
         horizontalArrangement = Arrangement.spacedBy(itemSpacing)
     ) {
         items(
-            //todo when you have id's add them as key. MUST BE SAVEABLE IN A BUNDLE!
-//            key = { it.id },
+            key = { it.id },
             items = shows
         ) {
-            ShowListItem(it)
+            ShowListItem(it, onUserAction)
         }
     }
 }
@@ -205,13 +215,16 @@ private fun ShowsGridPreview() {
         listOf(it.first, it.second)
     }
 
-    ShowsGrid(result)
+    ShowsGrid(result) { /*do nothing*/ }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ShowListItem(show: ShowLocalModel) {
-    Card(onClick = { /*TODO*/ }) {
+private fun ShowListItem(
+    show: ShowLocalModel,
+    onUserAction: onUserAction
+) {
+    Card(onClick = { onUserAction(OnShowClicked(show.id)) }) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -256,13 +269,13 @@ private fun ShowListItemPreview() {
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        ShowListItem(ShowLocalModel.dummyShow())
+        ShowListItem(ShowLocalModel.dummyShow()) { /*do nothing*/ }
         ShowListItem(
             ShowLocalModel.dummyShow(
                 name = "a very long show name which spans multiple lines",
                 endYear = null
             )
-        )
+        ) { /*do nothing*/ }
     }
 }
 

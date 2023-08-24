@@ -1,6 +1,9 @@
 package com.hotmail.or_dvir.televizia.ui.shows.showDetails
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hotmail.or_dvir.televizia.ui.shows.allShows.AllShowsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,8 +33,8 @@ fun ShowDetailsScreen(
     showId: Int,
     viewModel: AllShowsViewModel = koinViewModel(parameters = { parametersOf(showId) }),
 ) {
-    stopped here
+    val isLoading by viewModel.loadingState.collectAsStateWithLifecycle()
+
+    Text("show details: $showId")
 
 }
-
-

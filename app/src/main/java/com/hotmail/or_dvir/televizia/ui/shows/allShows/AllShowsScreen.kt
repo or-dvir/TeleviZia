@@ -25,11 +25,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,19 +63,31 @@ fun AllShowsScreen(
     viewModel: AllShowsViewModel = koinViewModel()
 ) {
     val isLoading by viewModel.loadingState.collectAsStateWithLifecycle()
+    val allShows by viewModel.allShows.collectAsStateWithLifecycle()
 
-    Scaffold(
+    val topAppBarBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+     Scaffold(
+        modifier = Modifier.nestedScroll(topAppBarBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = { Text(stringResource(R.string.allShowsScreen_title)) }
+                title = { Text(stringResource(R.string.allShowsScreen_title)) },
+                scrollBehavior = topAppBarBehavior
             )
         }
     ) { paddingValues ->
-
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            if (isLoading) {
+                LoadingItemGrid()
+            } else {
+                ShowsGrid(allShows)
+            }
+        }
     }
-
-
 }
 
 @Composable
@@ -148,17 +162,6 @@ private fun LoadingItemGrid() {
     ) {
         items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
     }
-
-//    LazyVerticalGrid(
-//        userScrollEnabled = false,
-//        modifier = Modifier.fillMaxSize(),
-//        contentPadding = PaddingValues(itemSpacing),
-//        verticalArrangement = Arrangement.spacedBy(itemSpacing),
-//        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-//        columns = GridCells.Adaptive(getShowPosterSize().first)
-//    ) {
-//        items(15) { LoadingItem(LoadingItemNameSize.values().random()) }
-//    }
 }
 
 @Preview(showBackground = true)

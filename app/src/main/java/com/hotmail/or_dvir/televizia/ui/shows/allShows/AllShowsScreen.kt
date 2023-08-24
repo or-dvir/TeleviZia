@@ -225,9 +225,7 @@ private fun ShowListItem(
     onUserAction: onUserAction
 ) {
     Card(onClick = { onUserAction(OnShowClicked(show.id)) }) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Column {
             AsyncImage(
                 modifier = Modifier
                     .focusable(false)

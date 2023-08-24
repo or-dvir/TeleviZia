@@ -232,19 +232,18 @@ private fun ShowListItem(show: ShowLocalModel) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     text = show.name
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 //todo is "current" the best strign here?
                 val endYear = show.endYear ?: stringResource(R.string.present)
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     text = "${show.releaseYear}-$endYear",
-                    fontWeight = FontWeight.Bold
                 )
             }
         }
